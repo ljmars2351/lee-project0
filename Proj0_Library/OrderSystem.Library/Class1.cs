@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Proj0_Library
+namespace OrderSystem.Library
 {
     public class Class1
     {
