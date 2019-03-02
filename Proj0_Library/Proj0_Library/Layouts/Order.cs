@@ -8,8 +8,10 @@ namespace OrderSystem.Library.Layouts
     {
         public int OrdId { get; set; }
 
-        public string CustName { get; set; }
+        public int CustId { get; set; }
 
-        public List<Products> cart = new List<Products>();
+        public List<Products> Cart { get; set; }
+
+        public int StoreId { get; set; }
     }
 }

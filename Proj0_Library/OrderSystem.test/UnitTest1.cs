@@ -1,4 +1,5 @@
 using OrderSystem.Library.Layouts;
+using OrderSystem.Library.Storage;
 using System;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace OrderSystem.test
     {
         Customer cust = new Customer();
         [Fact]
-        public void Customer_First_Name_Storing()
+        public void Add_Customer_First_Name()
         {
             string name = "Lunk";
             cust.FName = name;
@@ -16,7 +17,7 @@ namespace OrderSystem.test
         }
 
         [Fact]
-        public void Customer_Last_Name_Storing()
+        public void Add_Customer_Last_Name()
         {
             string name = "Mars";
             cust.LName = name;
@@ -24,7 +25,7 @@ namespace OrderSystem.test
         }
 
         [Fact]
-        public void Customer_Date_Of_Birth_Storing()
+        public void Add_Customer_Date_Of_Birth()
         {
 
             DateTime dob = new DateTime(1994,05,29);
@@ -32,6 +33,7 @@ namespace OrderSystem.test
             Assert.True(cust.DateOfBirth == dob);
         }
 
-
+        //[Fact]
+        //public void 
     }
 }

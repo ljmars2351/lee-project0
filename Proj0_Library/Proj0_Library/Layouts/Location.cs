@@ -16,6 +16,6 @@ namespace OrderSystem.Library.Layouts
 
         public string State { get; set; }
 
-        public List<Products> prodList = new List<Products>();
+        public List<Products> inventory = new List<Products>();
     }
 }

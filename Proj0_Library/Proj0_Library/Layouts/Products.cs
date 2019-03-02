@@ -11,5 +11,7 @@ namespace OrderSystem.Library.Layouts
         public int Quant { get; set; } = 0;
 
         public string IName { get; set; }
+
+        public decimal Price { get; set; }
     }
 }
