@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OrderSystem.Library.Layouts
+namespace OrderSystem.Library
 {
     public class Customer
     {

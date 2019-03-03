@@ -12,4 +12,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OrderSystem.DataAccess\OrderSystem.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

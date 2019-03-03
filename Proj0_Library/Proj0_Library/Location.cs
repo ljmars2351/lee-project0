@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OrderSystem.Library.Layouts
+namespace OrderSystem.Library
 {
     public class Location
     {
@@ -15,7 +15,5 @@ namespace OrderSystem.Library.Layouts
         public int Zip { get; set; }
 
         public string State { get; set; }
-
-        public List<Products> inventory = new List<Products>();
     }
 }

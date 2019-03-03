@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OrderSystem.Library.Layouts
+namespace OrderSystem.Library
 {
     public class Order
     {
@@ -10,8 +10,12 @@ namespace OrderSystem.Library.Layouts
 
         public int CustId { get; set; }
 
-        public List<Products> Cart { get; set; }
-
         public int StoreId { get; set; }
+
+        public int ProdId { get; set; }
+
+        public int Quantity { get; set; }
+
+        public DateTime OrdTIme { get; set; }
     }
 }
