@@ -13,7 +13,6 @@ namespace OrderSystem.Library
             LName = cust.LastName,
             DateOfBirth = cust.DateOfBirth,
             Loc = (int)cust.PrefLoc
-
         };
 
         public static DataAccess.Customer Map(Customer cust) => new DataAccess.Customer

@@ -11,7 +11,7 @@ namespace OrderSystem.Library
         void AddLocation(Location loc);
         void AddOrder(Order ord);
         void AddProduct(Products prod);
-        void RemoveCustomer(int id);
+        void RemoveCustomer(Customer cust);
         void UpdateInv(Order ord);
         Customer SearchCustomersById(int custId);
         Order SearchOrdersById(int ordId);

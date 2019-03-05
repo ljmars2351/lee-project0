@@ -44,6 +44,6 @@ namespace OrderSystem.Library
             get; set;
         }
 
-        public int Loc { get; set; } = 1;
+        public int Loc { get; set; }
     }
 }
