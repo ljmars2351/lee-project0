@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderSystem.Library;
 using OrderSystem.DataAccess;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace OrderSystem.UI
 {
@@ -35,7 +36,7 @@ namespace OrderSystem.UI
                         Console.WriteLine("3. Administrator");
                         entry = Console.ReadLine();
                         cont = int.TryParse(entry, out num);
-                        if(cont == false || num > 3 && num != 99)
+                        if (cont == false || num > 3 && num != 99)
                         {
                             Console.WriteLine("Please enter a valid number.");
                             cont = false;
@@ -63,98 +64,91 @@ namespace OrderSystem.UI
                         {
                             var newCust = new Library.Customer();
                             DateTime dob = new DateTime();
-                            Console.WriteLine("Exiting will be disabled, do you wish to continue? (y/n)");
-                            entry = Console.ReadLine().ToLower();
-                            if (entry == "y")
+                            while (cont == false)
                             {
-                                while (cont == false)
+                                Console.WriteLine("Enter the first name.");
+                                entry = Console.ReadLine();
+                                newCust.FName = entry;
+                                Console.WriteLine("Enter the last name");
+                                entry = Console.ReadLine();
+                                newCust.LName = entry;
+                                Console.WriteLine("Enter the birthday (yyyy-mm-dd)");
+                                entry = Console.ReadLine();
+                                cont = DateTime.TryParse(entry, out dob);
+                                if (cont == false)
                                 {
-                                    Console.WriteLine("Enter the first name.");
-                                    entry = Console.ReadLine();
-                                    newCust.FName = entry;
-                                    Console.WriteLine("Enter the last name");
-                                    entry = Console.ReadLine();
-                                    newCust.LName = entry;
-                                    Console.WriteLine("Enter the birthday (yyyy-mm-dd)");
-                                    entry = Console.ReadLine();
-                                    cont = DateTime.TryParse(entry, out dob);
-                                    if (cont == false)
-                                    {
-                                        Console.WriteLine("Please enter a valid birthday.");
-                                    }
-                                    newCust.DateOfBirth = dob;
-                                    newCust.Loc = 4;
+                                    Console.WriteLine("Please enter a valid birthday.");
                                 }
-                                orderRepo.AddCustomer(newCust);
-                                Console.WriteLine("Exiting re-enabled\n");
+                                newCust.DateOfBirth = dob;
+                                newCust.Loc = 4;
                             }
-                            else
-                                Console.WriteLine("Exiting customer creation\n");
+                            orderRepo.AddCustomer(newCust);
                             cont = false;
+                            num = 0;
                         }
                         if (num == 2)
                         {
-                            var newOrd = new Order();
+                            var contOrd = true;
+                            var newOrdList = new List<Order>();
+                            var updateList = new List<Library.Inventory>();
+                            var newUp = new Library.Inventory();
+                            var newOrd = new Order();                             
                             DateTime time = new DateTime();
                             var cust = new Library.Customer();
-                            Console.WriteLine("Exiting will be disabled, do you wish to continue? (y/n)");
-                            entry = Console.ReadLine().ToLower();
-                            if (entry == "y")
+                            while (cont == false)
                             {
-                                while (cont == false)
+                                Console.WriteLine("Please enter the customer ID");
+                                entry = Console.ReadLine();
+                                cont = int.TryParse(entry, out num);
+                                if (cont == false)
                                 {
-                                    Console.WriteLine("Please enter the customer ID");
-                                    entry = Console.ReadLine();
-                                    cont = int.TryParse(entry, out num);
-                                    if (cont == false)
-                                    {
-                                        Console.WriteLine("Please enter a valid ID");
-                                    }
-                                    cust = orderRepo.SearchCustomersById(num);
-                                    if (cust == null)
-                                    {
+                                    Console.WriteLine("Please enter a valid ID");
+                                }
+                                cust = orderRepo.SearchCustomersById(num);
+                                if (cust == null)
+                                {
 
-                                        while (cont2 == false || num > 2)
+                                    while (cont2 == false || num > 2)
+                                    {
+                                        Console.WriteLine("Customer does not exist, would you like to create?");
+                                        Console.WriteLine("1. Yes");
+                                        Console.WriteLine("2. No");
+                                        entry = Console.ReadLine();
+                                        cont2 = int.TryParse(entry, out num);
+                                        if (cont2 == false)
                                         {
-                                            Console.WriteLine("Customer does not exist, would you like to create?");
-                                            Console.WriteLine("1. Yes");
-                                            Console.WriteLine("2. No");
+                                            Console.WriteLine("Please enter a valid option");
+                                            cont2 = false;
+                                        }
+                                    }
+                                    cont2 = false;
+                                    if (num == 1)
+                                    {
+                                        Console.WriteLine("Enter the first name");
+                                        entry = Console.ReadLine();
+                                        cust.FName = entry;
+                                        Console.WriteLine("Enter the last name");
+                                        entry = Console.ReadLine();
+                                        cust.LName = entry;
+
+                                        while (cont2 == false)
+                                        {
+                                            Console.WriteLine("Enter the date of birth (yyyy-mm-dd)");
                                             entry = Console.ReadLine();
-                                            cont2 = int.TryParse(entry, out num);
+                                            cont2 = DateTime.TryParse(entry, out time);
                                             if (cont2 == false)
                                             {
-                                                Console.WriteLine("Please enter a valid option");
-                                                cont2 = false;
+                                                Console.WriteLine("Please enter a valid birthday");
                                             }
                                         }
                                         cont2 = false;
-                                        if (num == 1)
-                                        {
-                                            Console.WriteLine("Enter the first name");
-                                            entry = Console.ReadLine();
-                                            cust.FName = entry;
-                                            Console.WriteLine("Enter the last name");
-                                            entry = Console.ReadLine();
-                                            cust.LName = entry;
-
-                                            while (cont2 == false)
-                                            {
-                                                Console.WriteLine("Enter the date of birth (yyyy-mm-dd)");
-                                                entry = Console.ReadLine();
-                                                cont2 = DateTime.TryParse(entry, out time);
-                                                if (cont2 == false)
-                                                {
-                                                    Console.WriteLine("Please enter a valid birthday");
-                                                }
-                                            }
-                                            cust.DateOfBirth = time;
-                                            cust.Loc = 3;
-                                            orderRepo.AddCustomer(cust);
-                                        }
-                                        if (num == 2)
-                                        {
-                                            cont = false;
-                                        }
+                                        cust.DateOfBirth = time;
+                                        cust.Loc = 3;
+                                        orderRepo.AddCustomer(cust);
+                                    }
+                                    if (num == 2)
+                                    {
+                                        cont = false;
                                     }
                                 }
                                 cont = false;
@@ -169,41 +163,108 @@ namespace OrderSystem.UI
                                         Console.WriteLine("Please enter a valid ID");
                                     }
                                 }
-                                cont = false;
                                 newOrd.StoreId = num;
+                                var pList = orderRepo.GetProducts().ToList();
+                                List<Library.Inventory> stList = new List<Library.Inventory>();
+                                cont = false;
                                 while (cont == false)
                                 {
-                                    Console.WriteLine("Please enter the product ID");
-                                    entry = Console.ReadLine();
-                                    cont = int.TryParse(entry, out num);
-                                    if (cont == false)
+                                    stList = orderRepo.GetInventory(newOrd.StoreId).ToList();
+                                    if (stList.Count == 0)
                                     {
-                                        Console.WriteLine("Please enter a valid ID");
+                                        cont = false;
+                                        Console.WriteLine("That store either doesn't exist or has no inventory, try again");
                                     }
+                                    else
+                                        cont = true;
                                 }
                                 cont = false;
-                                newOrd.ProdId = num;
-                                while (cont == false)
+                                int rep = 0;
+                                int newOnHand = 0;
+                                while (contOrd == true)
                                 {
-                                    Console.WriteLine("Please enter the desired quantity");
-                                    entry = Console.ReadLine();
-                                    cont = int.TryParse(entry, out num);
-                                    if (cont == false)
+                                    cont = false;
+                                    newOrd.StoreId = num;
+                                    Console.WriteLine("Please select a product from the list below");
+                                    for (int z = 0; z < pList.Count; z++)
                                     {
-                                        Console.WriteLine("Please enter a valid number");
+                                        Console.WriteLine($"ID: {pList[z].ProdId}\nName: {pList[z].Name}\nPrice: {pList[z].Price}\n" +
+                                            $"Store's on hand quantity: {stList.First(s => s.ProductId == pList[z].ProdId).Quantity}");
                                     }
+                                    while (cont == false)
+                                    {
+                                        Console.WriteLine("Please enter the product ID");
+                                        entry = Console.ReadLine();
+                                        cont = int.TryParse(entry, out num);
+                                        if (cont == false)
+                                        {
+                                            Console.WriteLine("Please enter a valid ID");
+                                        }
+                                    }
+                                    cont = false;
+                                    newOrd.ProdId = num;
+                                    while (cont == false)
+                                    {
+                                        Console.WriteLine("Please enter the desired quantity");
+                                        entry = Console.ReadLine();
+                                        cont = int.TryParse(entry, out num);
+                                        if (cont == false)
+                                        {
+                                            Console.WriteLine("Please enter a valid number");
+                                        }
+                                    }
+                                    cont = false;
+                                    int onHand = 0;
+                                    try
+                                    {
+                                        onHand = stList.First(v => v.ProductId == newOrd.ProdId).Quantity;
+                                    }
+                                    catch(InvalidOperationException)
+                                    {
+                                        Console.WriteLine("Something went wrong, try again");
+                                    }
+                                    if (num > onHand)
+                                    {
+                                        Console.WriteLine("Quantity exceeds store on hand supply");
+                                    }
+                                    else
+                                    {
+                                        newOrd.Quantity = num;
+                                        time = DateTime.Now;
+                                        newOrd.OrdTIme = time;
+                                        newOrdList.Add(newOrd);
+                                        newOnHand = onHand - newOrd.Quantity;
+                                        stList.First(u => u.LocationId == newOrd.StoreId && u.ProductId == newOrd.ProdId).Quantity = newOnHand;
+                                        newUp.LocationId = newOrd.StoreId;
+                                        newUp.ProductId = newOrd.ProdId;
+                                        newUp.Quantity = newOnHand;
+                                        updateList.Add(newUp);
+                                        num = newOrd.StoreId;
+                                    }
+                                    contOrd = false;
                                 }
-                                cont = false;
-                                newOrd.Quantity = num;
-                                time = DateTime.Now;
-                                newOrd.OrdTIme = time;
-                                orderRepo.AddOrder(newOrd);
-                                Console.WriteLine("Exiting re-enabled");
+                                contOrd = false;
+                                int sub = 0;
+                                while(cont == false)
+                                {
+                                    Console.WriteLine("Submit order? 1. Yes 2. No");
+                                    entry = Console.ReadLine();
+                                    cont = int.TryParse(entry, out sub);
+                                    if(cont == false)
+                                        Console.WriteLine("Invalid input");
+                                }
+                                if (sub == 1)
+                                {
+                                    orderRepo.AddOrder(newOrdList);
+                                    orderRepo.UpdateInv(updateList);
+                                    Console.WriteLine("Order submitted");
+                                }
+                                else
+                                    Console.WriteLine("Order not submitted");
                             }
-                            else
-                                Console.WriteLine("Exiting order creation");
+                            num = 0;
                         }
-                        if(num == 3)
+                        if (num == 3)
                         {
                             var cust = new Library.Customer();
                             while (cont == false)
@@ -218,11 +279,11 @@ namespace OrderSystem.UI
                                 cust = orderRepo.SearchCustomersById(num);
                             }
                             cont = false;
-                            while(cont == false)
+                            while (cont == false)
                             {
                                 Console.WriteLine("Please select from the current list of locations");
                                 var list = orderRepo.GetLocations().ToList();
-                                for(int x = 0; x < list.Count; x++)
+                                for (int x = 0; x < list.Count; x++)
                                 {
                                     var loc = list[x];
 
@@ -231,7 +292,7 @@ namespace OrderSystem.UI
                                 Console.WriteLine("Enter the new location ID");
                                 entry = Console.ReadLine();
                                 cont = int.TryParse(entry, out num);
-                                if(cont == false)
+                                if (cont == false)
                                 {
                                     Console.WriteLine("Please enter a valid ID");
                                 }
@@ -239,8 +300,9 @@ namespace OrderSystem.UI
                             cust.Loc = num;
                             orderRepo.UpdateLocation(cust);
                             cont = false;
+                            num = 0;
                         }
-                        if(num == 4)
+                        if (num == 4)
                         {
                             while (cont == false)
                             {
@@ -254,6 +316,10 @@ namespace OrderSystem.UI
                             }
                             cont = false;
                             var list = orderRepo.GetOrders(num).ToList();
+                            if(list.Count == 0)
+                            {
+                                Console.WriteLine("Customer either does not exist or has no orders");
+                            }
                             for (int x = 0; x < list.Count; x++)
                             {
                                 var cart = list[x];
@@ -263,57 +329,42 @@ namespace OrderSystem.UI
                                     $"The order ID is {cart.OrdId}\nThe ordered product name is {item.Name}\n" +
                                     $"The quantity ordered is {cart.Quantity}\nThe store's ID is {cart.StoreId}\n");
                             }
+                            num = 0;
                         }
-                        if(num == 5)
+                        if (num == 5)
                         {
                             num = 0;
-                            while(cont == false || num > 2)
+                            while (cont == false || num > 2)
                             {
                                 Console.WriteLine("1. View customer information");
                                 Console.WriteLine("2. Update customer information");
                                 entry = Console.ReadLine();
                                 cont = int.TryParse(entry, out num);
-                                if(cont == false)
+                                if (cont == false)
                                 {
                                     Console.WriteLine("Please enter a valid option");
                                 }
                             }
                             cont = false;
-                            if(num == 1)
+                            if (num == 1)
                             {
-                                string quit = "";
-                                int id = 0;
-                                while (cont == false || cont2 == false)
+                                Console.WriteLine("Please enter the customer's first name");
+                                string fName = Console.ReadLine();
+                                Console.WriteLine("Please enter the customer's last name");
+                                string lName = Console.ReadLine();
+                                var cust = orderRepo.SearchCustomersByName(fName, lName);
+                                if (cust == null)
                                 {
-                                    quit = "";
-                                    Console.WriteLine("Please enter the customer ID");
-                                    entry = Console.ReadLine();
-                                    cont = int.TryParse(entry, out num);
-                                    cont2 = custList.Any(s => s.CustId == num);
-                                    if(cont == false)
-                                    {
-                                        Console.WriteLine("Please enter a valid ID");
-                                    }
-                                    if(cont2 == false)
-                                    {
-                                        Console.WriteLine("That ID does not exist, try again? (y/n)");
-                                        quit = Console.ReadLine().ToLower();
-                                        if (quit != "y")
-                                            cont2 = true;
-                                    }
-                                    id = num;
+                                    Console.WriteLine("No such customer exists");
                                 }
-                                cont = false;
-                                cont2 = false;
-                                if(quit != "y")
+                                else
                                 {
-                                    var cust = orderRepo.SearchCustomersById(id);
                                     Console.WriteLine($"First Name: {cust.FName}\nLast Name: {cust.LName}\n" +
                                         $"Date of Birth: {cust.DateOfBirth.Month}/{cust.DateOfBirth.Day}/{cust.DateOfBirth.Year}\n" +
-                                        $"Preferred Location: {cust.Loc}");
+                                        $"Preferred Location: {cust.Loc}\nCustomer ID: {cust.CustId}");
                                 }
                             }
-                            if(num == 2)
+                            if (num == 2)
                             {
                                 string quit = "";
                                 int id = 0;
@@ -339,7 +390,7 @@ namespace OrderSystem.UI
                                 }
                                 cont = false;
                                 cont2 = false;
-                                if (quit != "y")
+                                if (quit != "n")
                                 {
                                     DateTime dateTime = new DateTime();
                                     var cust = orderRepo.SearchCustomersById(id);
@@ -350,9 +401,10 @@ namespace OrderSystem.UI
                                     entry = Console.ReadLine();
                                     cust.LName = entry;
                                     Console.WriteLine("Enter the date of birth (yyyy-mm-dd)");
-                                    entry = Console.ReadLine();
-                                    while(cont == false)
+
+                                    while (cont == false)
                                     {
+                                        entry = Console.ReadLine();
                                         cont = DateTime.TryParse(entry, out dateTime);
                                         if (cont == false)
                                         {
@@ -361,14 +413,12 @@ namespace OrderSystem.UI
                                     }
                                     cont = false;
                                     cust.DateOfBirth = dateTime;
-                                    Console.WriteLine("Enter new preferred location ID");
-                                    entry = Console.ReadLine();
                                     string qui = "";
                                     int i = 0;
                                     while (cont == false || cont2 == false)
                                     {
                                         qui = "";
-                                        Console.WriteLine("Please enter the customer ID");
+                                        Console.WriteLine("Please enter the new location ID");
                                         entry = Console.ReadLine();
                                         cont = int.TryParse(entry, out num);
                                         cont2 = locList.Any(s => s.LocId == num);
@@ -379,7 +429,7 @@ namespace OrderSystem.UI
                                         if (cont2 == false)
                                         {
                                             Console.WriteLine("That ID does not exist, try again? (y/n)");
-                                            quit = Console.ReadLine().ToLower();
+                                            qui = Console.ReadLine().ToLower();
                                             if (qui != "y")
                                                 cont2 = true;
                                         }
@@ -387,28 +437,31 @@ namespace OrderSystem.UI
                                     }
                                     cont = false;
                                     cont2 = false;
-                                    if (qui != "y")
+                                    if (qui != "n")
                                     {
                                         cust.Loc = i;
                                         orderRepo.UpdateCustomer(cust);
+                                        Console.WriteLine("Update successful");
                                     }
                                 }
                             }
+                            num = 0;
                         }
                         if (num == 99)
                         {
                             break;
                         }
                     }
-                    if(num == 2)
+                    if (num == 2)
                     {
-                        while(cont == false)
+                        while (cont == false || num > 5)
                         {
                             Console.WriteLine("Please select an option");
-                            Console.WriteLine("1. Remove a customer");
+                            Console.WriteLine("1. View inventory list");
                             Console.WriteLine("2. Update a price");
                             Console.WriteLine("3. Update onhand quantities");
                             Console.WriteLine("4. View customer list");
+                            Console.WriteLine("5. View store order history");
                             entry = Console.ReadLine();
                             cont = int.TryParse(entry, out num);
                             if (cont == false)
@@ -416,8 +469,156 @@ namespace OrderSystem.UI
                                 Console.WriteLine("Please select a valid option");
                             }
                         }
+                        cont = false;
+                        if (num == 1)
+                        {
+                            int stId = 0;
+                            while (cont == false || cont2 == false)
+                            {
+                                Console.WriteLine("Please enter the store number to be viewed");
+                                entry = Console.ReadLine();
+                                cont = int.TryParse(entry, out stId);
+                                cont2 = locList.Any(s => s.LocId == stId);
+                                if (cont == false)
+                                {
+                                    Console.WriteLine("Invalid input");
+                                }
+                                if (cont2 == false)
+                                {
+                                    Console.WriteLine("Store does not exist");
+                                }
+                            }
+                            cont = false;
+                            cont2 = false;
+                            var invList = orderRepo.GetInventory(stId).ToList();
+                            var pList = orderRepo.GetProducts().ToList();
+                            for (int c = 0; c < invList.Count; c++)
+                            {
+                                Console.WriteLine($"Product ID: {invList[c].ProductId}\nProduct name: {pList.First(s => s.ProdId == invList[c].ProductId).Name}\n" +
+                                    $"Quantity on hand: {invList[c].Quantity}\nPrice: {pList.First(s => s.ProdId == invList[c].ProductId).Name}");
+                            }
+                            num = 0;
+                        }
+                        if (num == 2)
+                        {
+                            cont = false;
+                            int sId = num;
+                            while(cont == false)
+                            {
+                                Console.WriteLine("Please input the product ID to update");
+                                entry = Console.ReadLine();
+                                cont = int.TryParse(entry, out num);
+                                if (cont == false)
+                                {
+                                    Console.WriteLine("Invalid ID");
+                                }
+                            }
+                            cont = false;
+                            int pId = num;
+                            decimal mon = 0;
+                            while(cont == false)
+                            {
+                                Console.WriteLine("Please input the new price");
+                                entry = Console.ReadLine();
+                                cont = decimal.TryParse(entry, out mon);
+                                if (cont == false)
+                                {
+                                    Console.WriteLine("Invalid price");
+                                }
+                            }
+                            cont = false;
+                            Products products = new Products();
+                            products.ProdId = pId;
+                            products.Price = mon;
+                            orderRepo.AddProduct(products);
+                            num = 0;
+                        }
+                        if (num == 3)
+                        {
+                            int it = 0;
+                            string qui = "";
+                            while (cont == false || cont2 == false)
+                            {
+                                Console.WriteLine("Please input the store ID to update the inventory of");
+                                entry = Console.ReadLine();
+                                cont = int.TryParse(entry, out it);
+                                cont2 = locList.Any(s => s.LocId == it);
+                                if (cont == false)
+                                {
+                                    Console.WriteLine("Incorrect input");
+                                }
+                                if (cont2 == false)
+                                {
+                                    Console.WriteLine("That is not a valid store location, try again? (y/n)");
+                                    qui = Console.ReadLine().ToLower();
+                                    if (qui != "y")
+                                        cont2 = true;
+                                }
+                            }
+                            cont = false;
+                            cont2 = false;
+                            if (qui != "n")
+                            {
+                                var newInv = new Library.Inventory();
+                                var mewInv = orderRepo.GetProducts().ToList();
+                                int pId = 0;
+                                for (int w = 0; w < mewInv.Count; w++)
+                                {
+                                    Console.WriteLine("Please select a product from the following list");
+                                    Console.WriteLine($"ID: {mewInv[w].ProdId} Name: {mewInv[w].Name}");
+                                }
+                                while (cont == false || cont2 == false)
+                                {
+                                    Console.WriteLine("Enter the ID of the product to be updated");
+                                    entry = Console.ReadLine();
+                                    cont = int.TryParse(entry, out pId);
+                                    if (cont == false)
+                                    {
+                                        Console.WriteLine("Invalid ID");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Please enter the quantity for {mewInv.First(s => s.ProdId == newInv.ProductId).Name}");
+                                        entry = Console.ReadLine();
+                                        cont2 = int.TryParse(entry, out num);
+                                        if (cont2 == false)
+                                        {
+                                            Console.WriteLine("Please enter a valid number");
+                                        }
+                                    }
+                                }
+                                cont = false;
+                                cont2 = false;
+                                newInv.Quantity = num;
+                                orderRepo.AddInventory(newInv);
+                            }
+                            num = 0;
+                        }
+                        if (num == 4)
+                        {
+                            var cList = orderRepo.GetCustomers().ToList();
+                            for(int x = 0; x < cList.Count; x++)
+                            {
+                                Console.WriteLine($"First name: {cList[x].FName}\nLast name: {cList[x].LName}\n" +
+                                    $"ID: {cList[x].CustId}");
+                            }
+                            num = 0;
+                        }
+                        if(num == 5)
+                        {
+                            Console.WriteLine("Please enter the store number to get the history for");
+                            entry = Console.ReadLine();
+                            num = int.Parse(entry);
+                            var oList = orderRepo.SearchOrdersByStore(num).ToList();
+                            for(int n = 0; n < oList.Count; n++)
+                            {
+                                Console.WriteLine($"The order id is {oList[n].OrdId}\nThe customer id is {oList[n].CustId}\n" +
+                                    $"The product id is {oList[n].ProdId}\nThe quantity ordered is {oList[n].Quantity}");
+                            }
+                        }
+                        num = 0;
                     }
-                    if(num == 3)
+                    if (num == 3)
                     {
                         while (cont == false)
                         {
@@ -426,17 +627,19 @@ namespace OrderSystem.UI
                             Console.WriteLine("1. Add a new location.");
                             Console.WriteLine("2. Add a new product.");
                             Console.WriteLine("3. Add a new bundle.");
+                            Console.WriteLine("4. Initialize a location inventory.");
                             entry = Console.ReadLine();
                             cont = int.TryParse(entry, out num);
-                            if(cont == false)
+                            if (cont == false)
                             {
                                 Console.WriteLine("Please enter a valid option");
                             }
                         }
                         cont = false;
-                        if(num == 1)
+                        if (num == 1)
                         {
                             var loc = new Library.Location();
+                            var inv = new Library.Inventory();
                             Console.WriteLine("Enter the location's street address");
                             entry = Console.ReadLine();
                             loc.StreetAddress = entry;
@@ -460,10 +663,32 @@ namespace OrderSystem.UI
                             cont = false;
                             loc.Zip = num;
                             orderRepo.AddLocation(loc);
+                            var lList = orderRepo.GetLocations().ToList();
+                            inv.LocationId = lList.First(l => l.StreetAddress == loc.StreetAddress).LocId;
+                            var pList = orderRepo.GetProducts().ToList();
+                            for (int x = 0; x < prodList.Count(); x++)
+                            {
+                                while (cont == false)
+                                {
+                                    Console.WriteLine($"Please enter the desired quantity for {pList[x].Name}");
+                                    entry = Console.ReadLine();
+                                    cont = int.TryParse(entry, out num);
+                                    if (cont == false)
+                                    {
+                                        Console.WriteLine("Please enter a correct quantity");
+                                    }
+                                }
+                                inv.Quantity = num;
+                                inv.ProductId = pList[x].ProdId;
+                                orderRepo.AddInventory(inv);
+                            }
+                            num = 0;
                         }
-                        if(num == 2)
+                        else if (num == 2)
                         {
                             var prod = new Products();
+                            var inv = new Library.Inventory();
+                            var loList = orderRepo.GetLocations().ToList();
                             decimal dec = 0;
                             Console.WriteLine("Enter the name of the item");
                             entry = Console.ReadLine();
@@ -473,7 +698,7 @@ namespace OrderSystem.UI
                                 Console.WriteLine("Enter the price of the item");
                                 entry = Console.ReadLine();
                                 cont = decimal.TryParse(entry, out dec);
-                                if(cont == false)
+                                if (cont == false)
                                 {
                                     Console.WriteLine("Please input a valid price");
                                 }
@@ -481,7 +706,86 @@ namespace OrderSystem.UI
                             cont = false;
                             prod.Price = dec;
                             orderRepo.AddProduct(prod);
+                            for (int s = 0; s < loList.Count; s++)
+                            {
+                                while (cont == false)
+                                {
+                                    Console.WriteLine($"Please enter the quantity for location {loList[s].StreetAddress}");
+                                    entry = Console.ReadLine();
+                                    cont = int.TryParse(entry, out num);
+                                    if (cont == false)
+                                    {
+                                        Console.WriteLine("Invalid quantity");
+                                    }
+                                }
+                                inv.Quantity = num;
+                                inv.LocationId = loList[s].LocId;
+                                var tempProdList = orderRepo.GetProducts().ToList();
+                                var tempProd = tempProdList.First(q => q.Name == prod.Name);
+                                inv.ProductId = tempProd.ProdId;
+                                orderRepo.AddInventory(inv);
+                                cont = false;
+                            }
+                            cont = false;
                         }
+                        else if (num == 3)
+                        {
+
+                        }
+                        else if (num == 4)
+                        {
+                            var lList = orderRepo.GetLocations().ToList();
+                            var newInv = new Library.Inventory();
+                            int it = 0;
+                            for (int z = 0; z < lList.Count; z++)
+                            {
+                                Console.WriteLine($"For ID {lList[z].LocId} the address is {lList[z].StreetAddress}");
+                            }
+                            string qui = "";
+                            while (cont == false || cont2 == false)
+                            {
+                                Console.WriteLine("Please input the store ID to initialize the inventory of");
+                                entry = Console.ReadLine();
+                                cont = int.TryParse(entry, out it);
+                                cont2 = locList.Any(s => s.LocId == it);
+                                if (cont == false)
+                                {
+                                    Console.WriteLine("Incorrect input");
+                                }
+                                if (cont2 == false)
+                                {
+                                    Console.WriteLine("That is not a valid store location, try again? (y/n)");
+                                    qui = Console.ReadLine().ToLower();
+                                    if (qui != "y")
+                                        cont2 = true;
+                                }
+                            }
+                            cont = false;
+                            cont2 = false;
+                            if (qui != "n")
+                            {
+                                newInv.LocationId = it;
+                                var mewInv = orderRepo.GetProducts().ToList();
+                                for (int a = 0; a < mewInv.Count; a++)
+                                {
+                                    newInv.ProductId = mewInv[a].ProdId;
+                                    while (cont == false)
+                                    {
+                                        Console.WriteLine($"Please enter the quantity for {mewInv[a].Name}");
+                                        entry = Console.ReadLine();
+                                        cont = int.TryParse(entry, out num);
+                                        if (cont == false)
+                                        {
+                                            Console.WriteLine("Please enter a valid number");
+                                        }
+                                    }
+                                    cont = false;
+                                    newInv.Quantity = num;
+                                    orderRepo.AddInventory(newInv);
+                                }
+                            }
+                        }
+                        num = 0;
                     }
                     if (num == 99)
                     {

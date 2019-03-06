@@ -24,6 +24,8 @@ namespace OrderSystem.DataAccess
         public virtual DbSet<ProdHist> ProdHist { get; set; }
         public virtual DbSet<Product> Product { get; set; }
 
+        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
@@ -61,40 +63,39 @@ namespace OrderSystem.DataAccess
 
             modelBuilder.Entity<Cart>(entity =>
             {
-                entity.ToTable("Cart", "OrdSys");
+                entity.HasKey(e => new { e.Id, e.CustId, e.LocId, e.ProdId })
+                    .HasName("PK_cart_comp");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("Cart", "OrdSys");
 
                 entity.HasOne(d => d.Cust)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.CustId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cart__CustId__5EBF139D");
+                    .HasConstraintName("FK__Cart__CustId__04E4BC85");
 
                 entity.HasOne(d => d.Loc)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.LocId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cart__LocId__5FB337D6");
+                    .HasConstraintName("FK__Cart__LocId__06CD04F7");
 
                 entity.HasOne(d => d.Prod)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.ProdId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cart__ProdId__60A75C0F");
+                    .HasConstraintName("FK__Cart__ProdId__05D8E0BE");
             });
 
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.ToTable("Customer", "OrdSys");
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(1);
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(1);
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+
+                entity.Property(e => e.LastName).HasMaxLength(100);
 
                 entity.HasOne(d => d.PrefLocNavigation)
                     .WithMany(p => p.Customer)
@@ -104,15 +105,16 @@ namespace OrderSystem.DataAccess
 
             modelBuilder.Entity<Inventory>(entity =>
             {
-                entity.ToTable("Inventory", "OrdSys");
+                entity.HasKey(e => new { e.ProdId, e.LocationId })
+                    .HasName("PK_comp");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("Inventory", "OrdSys");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Inventory)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Locat__4F7CD00D");
+                    .HasConstraintName("FK_LocID");
 
                 entity.HasOne(d => d.Prod)
                     .WithMany(p => p.Inventory)

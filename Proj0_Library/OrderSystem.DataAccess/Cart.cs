@@ -7,10 +7,10 @@ namespace OrderSystem.DataAccess
     {
         public int Id { get; set; }
         public int CustId { get; set; }
-        public int LocId { get; set; }
         public int ProdId { get; set; }
-        public int Quant { get; set; }
-        public DateTime? Time { get; set; }
+        public int LocId { get; set; }
+        public DateTime CurrentTime { get; set; }
+        public int Quantity { get; set; }
 
         public virtual Customer Cust { get; set; }
         public virtual Location Loc { get; set; }

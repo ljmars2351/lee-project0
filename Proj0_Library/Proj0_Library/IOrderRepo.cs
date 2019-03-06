@@ -9,11 +9,11 @@ namespace OrderSystem.Library
         void AddCustomer(Customer cust);
 
         void AddLocation(Location loc);
-        void AddOrder(Order ord);
+        void AddOrder(List<Order> ord);
         void AddProduct(Products prod);
         void RemoveCustomer(Customer cust);
-        void UpdateInv(Order ord);
+        void UpdateInv(List<Library.Inventory> inventories);
         Customer SearchCustomersById(int custId);
-        Order SearchOrdersById(int ordId);
+        IEnumerable<Order> SearchOrdersByStore(int locId);
     }
 }

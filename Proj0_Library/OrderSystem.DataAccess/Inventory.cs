@@ -5,7 +5,6 @@ namespace OrderSystem.DataAccess
 {
     public partial class Inventory
     {
-        public int Id { get; set; }
         public int ProdId { get; set; }
         public int Quant { get; set; }
         public int LocationId { get; set; }

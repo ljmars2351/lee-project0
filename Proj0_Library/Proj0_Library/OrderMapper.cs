@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrderSystem.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace OrderSystem.Library
             CustId = cust.Id,
             FName = cust.FirstName,
             LName = cust.LastName,
-            DateOfBirth = cust.DateOfBirth,
+            DateOfBirth = (DateTime)cust.DateOfBirth,
             Loc = (int)cust.PrefLoc
         };
 
@@ -58,26 +59,24 @@ namespace OrderSystem.Library
 
         public static Products Map(DataAccess.ProdHist prodHist) => new Products
         {
-            ProdId = prodHist.Id,
             Name = prodHist.Name,
             Price = (decimal)prodHist.Price
         };
 
         public static DataAccess.ProdHist DualMap(Products prod) => new DataAccess.ProdHist
         {
-            Id = prod.ProdId,
             Name = prod.Name,
             Price = prod.Price
         };
 
         public static Order Map(DataAccess.Cart cart) => new Order
         {
-            OrdId = cart.Id,
+            OrdId = (int)cart.Id,
             StoreId = cart.LocId,
             CustId = cart.CustId,
             ProdId = cart.ProdId,
-            Quantity = cart.Quant,
-            OrdTIme = (DateTime)cart.Time
+            Quantity = (int)cart.Quantity,
+            OrdTIme = (DateTime)cart.CurrentTime
         };
 
         public static DataAccess.Cart Map(Order ord) => new DataAccess.Cart
@@ -86,11 +85,23 @@ namespace OrderSystem.Library
             LocId = ord.StoreId,
             CustId = ord.CustId,
             ProdId = ord.ProdId,
-            Quant = ord.Quantity,
-            Time = ord.OrdTIme
+            Quantity = ord.Quantity,
+            CurrentTime = ord.OrdTIme
         };
 
-        
+        public static Inventory Map(DataAccess.Inventory inv) => new Inventory
+        {
+            ProductId = inv.ProdId,
+            LocationId = inv.LocationId,
+            Quantity = inv.Quant
+        };
+
+        public static DataAccess.Inventory Map(Inventory inv) => new DataAccess.Inventory
+        {
+            ProdId = inv.ProductId,
+            LocationId = inv.LocationId,
+            Quant = inv.Quantity
+        };
 
         public static IEnumerable<Customer> Map(IEnumerable<DataAccess.Customer> cust) => cust.Select(Map);
 
@@ -111,5 +122,9 @@ namespace OrderSystem.Library
         public static IEnumerable<Order> Map(IEnumerable<DataAccess.Cart> cart) => cart.Select(Map);
 
         public static IEnumerable<DataAccess.Cart> Map(IEnumerable<Order> ord) => ord.Select(Map);
+
+        public static IEnumerable<Inventory> Map(IEnumerable<DataAccess.Inventory> inv) => inv.Select(Map);
+
+        public static IEnumerable<DataAccess.Inventory> Map(IEnumerable<Inventory> inv) => inv.Select(Map);
     }
 }
