@@ -34,31 +34,17 @@ namespace OrderSystem.DataAccess
             {
                 entity.ToTable("Bundle", "OrdSys");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.BundleName).HasMaxLength(50);
 
                 entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             });
 
             modelBuilder.Entity<BundleProds>(entity =>
             {
-                entity.HasKey(e => new { e.BundleId, e.ProdId })
-                    .HasName("PK_Bund");
+                entity.HasKey(e => new { e.BundleId, e.ProductId })
+                    .HasName("PK_bundle");
 
                 entity.ToTable("BundleProds", "OrdSys");
-
-                entity.HasOne(d => d.Bundle)
-                    .WithMany(p => p.BundleProds)
-                    .HasForeignKey(d => d.BundleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BundlePro__Bundl__59063A47");
-
-                entity.HasOne(d => d.Prod)
-                    .WithMany(p => p.BundleProds)
-                    .HasForeignKey(d => d.ProdId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BundlePro__ProdI__59FA5E80");
             });
 
             modelBuilder.Entity<Cart>(entity =>

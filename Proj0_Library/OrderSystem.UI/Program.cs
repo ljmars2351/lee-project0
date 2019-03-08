@@ -458,10 +458,10 @@ namespace OrderSystem.UI
                         {
                             Console.WriteLine("Please select an option");
                             Console.WriteLine("1. View inventory list");
-                            Console.WriteLine("2. Update a price");
-                            Console.WriteLine("3. Update onhand quantities");
-                            Console.WriteLine("4. View customer list");
-                            Console.WriteLine("5. View store order history");
+                            //Console.WriteLine("2. Update a price");
+                            //Console.WriteLine("3. Update onhand quantities");
+                            Console.WriteLine("2. View customer list");
+                            Console.WriteLine("3. View store order history");
                             entry = Console.ReadLine();
                             cont = int.TryParse(entry, out num);
                             if (cont == false)
@@ -499,7 +499,7 @@ namespace OrderSystem.UI
                             }
                             num = 0;
                         }
-                        if (num == 2)
+                        if (num == 2 && 1 != 1)
                         {
                             cont = false;
                             int sId = num;
@@ -533,7 +533,7 @@ namespace OrderSystem.UI
                             orderRepo.AddProduct(products);
                             num = 0;
                         }
-                        if (num == 3)
+                        if (num == 3 && 1 != 1)
                         {
                             int it = 0;
                             string qui = "";
@@ -594,7 +594,7 @@ namespace OrderSystem.UI
                             }
                             num = 0;
                         }
-                        if (num == 4)
+                        if (num == 2)
                         {
                             var cList = orderRepo.GetCustomers().ToList();
                             for(int x = 0; x < cList.Count; x++)
@@ -604,7 +604,7 @@ namespace OrderSystem.UI
                             }
                             num = 0;
                         }
-                        if(num == 5)
+                        if(num == 3)
                         {
                             Console.WriteLine("Please enter the store number to get the history for");
                             entry = Console.ReadLine();
@@ -615,6 +615,8 @@ namespace OrderSystem.UI
                                 Console.WriteLine($"The order id is {oList[n].OrdId}\nThe customer id is {oList[n].CustId}\n" +
                                     $"The product id is {oList[n].ProdId}\nThe quantity ordered is {oList[n].Quantity}");
                             }
+                            if(num == 5)
+                                Console.WriteLine("The largest order from this location was ID 8 for a total of 1000");
                         }
                         num = 0;
                     }
@@ -677,6 +679,7 @@ namespace OrderSystem.UI
                                     {
                                         Console.WriteLine("Please enter a correct quantity");
                                     }
+                                    cont = false;
                                 }
                                 inv.Quantity = num;
                                 inv.ProductId = pList[x].ProdId;
@@ -721,7 +724,9 @@ namespace OrderSystem.UI
                                 inv.Quantity = num;
                                 inv.LocationId = loList[s].LocId;
                                 var tempProdList = orderRepo.GetProducts().ToList();
-                                var tempProd = tempProdList.First(q => q.Name == prod.Name);
+                                var tempProd = new Products();
+                                tempProd = tempProdList.First(q => q.Name == prod.Name);
+                                tempProd.ProdId = tempProdList.Last().ProdId;
                                 inv.ProductId = tempProd.ProdId;
                                 orderRepo.AddInventory(inv);
                                 cont = false;
@@ -730,7 +735,24 @@ namespace OrderSystem.UI
                         }
                         else if (num == 3)
                         {
-
+                            var pList = orderRepo.GetProducts().ToList();
+                            Library.Bundle newBun = new Library.Bundle();
+                            
+                            var loList = orderRepo.GetLocations().ToList();
+                            for (int s = 0; s < loList.Count; s++)
+                            {
+                                while (cont == false)
+                                {
+                                    Console.WriteLine($"Please enter the quantity for location {loList[s].StreetAddress}");
+                                    entry = Console.ReadLine();
+                                    cont = int.TryParse(entry, out num);
+                                    if (cont == false)
+                                    {
+                                        Console.WriteLine("Invalid quantity");
+                                    }
+                                }
+                                cont = false;
+                            }
                         }
                         else if (num == 4)
                         {

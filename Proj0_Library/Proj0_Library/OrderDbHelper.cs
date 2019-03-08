@@ -51,6 +51,8 @@ namespace OrderSystem.Library
             {
                 _db.Product.First(p => p.Id == prod.ProdId).Price = prod.Price;
             }
+            else
+                _db.Add(OrderMapper.Map(prod));
             _db.Add(OrderMapper.DualMap(prod));
             _db.SaveChanges();
         }
@@ -175,6 +177,11 @@ namespace OrderSystem.Library
         public IEnumerable<Order> SearchOrdersByStore(int LocId)
         {
             return OrderMapper.Map(_db.Cart.Where(r => r.LocId == LocId));
+        }
+
+        public void CreateNewBundle(string Name, decimal Price, List<Products> products)
+        {
+
         }
     }
 }

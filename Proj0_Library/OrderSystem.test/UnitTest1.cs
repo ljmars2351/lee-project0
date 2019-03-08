@@ -32,7 +32,5 @@ namespace OrderSystem.test
             Assert.True(cust.DateOfBirth == dob);
         }
 
-        //[Fact]
-        //public void 
     }
 }

@@ -59,12 +59,14 @@ namespace OrderSystem.Library
 
         public static Products Map(DataAccess.ProdHist prodHist) => new Products
         {
+            ProdId = prodHist.Id,
             Name = prodHist.Name,
             Price = (decimal)prodHist.Price
         };
 
         public static DataAccess.ProdHist DualMap(Products prod) => new DataAccess.ProdHist
         {
+            Id = prod.ProdId,
             Name = prod.Name,
             Price = prod.Price
         };
@@ -101,6 +103,20 @@ namespace OrderSystem.Library
             ProdId = inv.ProductId,
             LocationId = inv.LocationId,
             Quant = inv.Quantity
+        };
+
+        public static Library.Bundle Map(DataAccess.Bundle bun) => new Library.Bundle
+        {
+            BunId = bun.Id,
+            BunName = bun.BundleName,
+            BunPrice = (decimal)bun.Price
+        };
+
+        public static DataAccess.Bundle Map(Bundle bun) => new DataAccess.Bundle
+        {
+            BundleName = bun.BunName,
+            Id = bun.BunId,
+            Price = bun.BunPrice
         };
 
         public static IEnumerable<Customer> Map(IEnumerable<DataAccess.Customer> cust) => cust.Select(Map);

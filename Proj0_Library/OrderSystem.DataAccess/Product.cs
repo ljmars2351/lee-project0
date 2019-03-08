@@ -7,7 +7,6 @@ namespace OrderSystem.DataAccess
     {
         public Product()
         {
-            BundleProds = new HashSet<BundleProds>();
             Inventory = new HashSet<Inventory>();
         }
 
@@ -15,7 +14,6 @@ namespace OrderSystem.DataAccess
         public string Name { get; set; }
         public decimal? Price { get; set; }
 
-        public virtual ICollection<BundleProds> BundleProds { get; set; }
         public virtual ICollection<Inventory> Inventory { get; set; }
     }
 }
