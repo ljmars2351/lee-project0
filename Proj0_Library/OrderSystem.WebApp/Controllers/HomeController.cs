@@ -15,7 +15,22 @@ namespace OrderSystem.WebApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Customers()
+        {
+            return View();
+        }
+
+        public IActionResult Order()
+        {
+            return View();
+        }
+
+        public IActionResult Locations()
+        {
+            return View();
+        }
+
+        public IActionResult Products()
         {
             return View();
         }

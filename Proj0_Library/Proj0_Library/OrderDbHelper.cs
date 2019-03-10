@@ -100,7 +100,7 @@ namespace OrderSystem.Library
             return OrderMapper.Map(_db.Inventory.Where(r => r.LocationId == LocId));
         }
 
-        public IEnumerable<Library.Order> GetOrders(int custId)
+        public IEnumerable<Library.Order> GetCustOrders(int custId)
         {
             return OrderMapper.Map(_db.Cart.Include(r => r.Cust).Where(r => r.Cust.Id == custId));
         }
@@ -159,11 +159,6 @@ namespace OrderSystem.Library
                 return null;
         }
 
-        public void UpdatePrice(Library.Inventory inv, decimal price)
-        {
-
-        }
-
         public Customer SearchCustomersByName(string fName, string lName)
         {
             if (_db.Customer.Any(s => s.FirstName == fName && s.LastName == lName))
@@ -182,6 +177,15 @@ namespace OrderSystem.Library
         public void CreateNewBundle(string Name, decimal Price, List<Products> products)
         {
 
+        }
+
+        public void DeleteCustomer(int custId)
+        {
+            if (_db.Customer.Any(s => s.Id == custId))
+            {
+                _db.Remove(_db.Customer.First(x => x.Id == custId));
+                _db.SaveChanges();
+            }
         }
     }
 }

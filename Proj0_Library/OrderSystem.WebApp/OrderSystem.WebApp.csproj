@@ -15,13 +15,13 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\NewFolder\" />
+    <ProjectReference Include="..\OrderSystem.DataAccess\OrderSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\Proj0_Library\OrderSystem.Library.csproj" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <ProjectReference Include="..\OrderSystem.DataAccess\OrderSystem.DataAccess.csproj" />
-    <ProjectReference Include="..\Proj0_Library\OrderSystem.Library.csproj" />
+    <Folder Include="Views\Customers\" />
   </ItemGroup>
 
 </Project>

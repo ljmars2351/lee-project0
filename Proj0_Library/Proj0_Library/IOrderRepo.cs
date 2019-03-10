@@ -7,9 +7,21 @@ namespace OrderSystem.Library
     public interface IOrderRepo
     {
         void AddCustomer(Customer cust);
-
+        IEnumerable<Library.Location> GetLocations();
+        void UpdateLocation(Customer cust);
+        void UpdateCustomer(Customer cust);
+        void AddInventory(Inventory inv);
+        IEnumerable<Inventory> GetInventory(int locId);
+        IEnumerable<Order> GetCustOrders(int custId);
+        IEnumerable<Customer> GetCustomers();
+        IEnumerable<Products> GetProducts();
+        IEnumerable<Products> GetProductHistory();
+        Products SearchProductsById(int prodId);
+        Location SearchLocationsById(int locId);
+        Customer SearchCustomersByName(string fName, string lName);
         void AddLocation(Location loc);
         void AddOrder(List<Order> ord);
+        void DeleteCustomer(int custId);
         void AddProduct(Products prod);
         void RemoveCustomer(Customer cust);
         void UpdateInv(List<Library.Inventory> inventories);

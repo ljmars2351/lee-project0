@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderSystem.DataAccess;
+using OrderSystem.Library;
 
 namespace OrderSystem.WebApp
 {
@@ -31,8 +34,17 @@ namespace OrderSystem.WebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //services.AddDbContext<Proj0Context>(builder =>
+            //builder.UseSqlServer(Configuration.GetConnectionString("Proj1DB")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddScoped<IOrderRepo, OrderDbHelper>();
+
+            services.AddMvc().AddControllersAsServices();
+
+            services.AddDbContext<Proj0Context>(builder =>
+            builder.UseSqlServer(Configuration.GetConnectionString("Proj1DB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
