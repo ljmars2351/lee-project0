@@ -22,6 +22,9 @@
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
@@ -40,7 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Quant)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.FName + " " + item.Customer.LName)
+                @Html.DisplayFor(modelItem => item.Customer.FName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.LName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Location.City)

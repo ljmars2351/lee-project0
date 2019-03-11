@@ -6,66 +6,122 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrderSystem.DataAccess;
+using OrderSystem.WebApp.ViewModels;
 
 namespace OrderSystem.WebApp.Controllers
 {
     public class LocationsController : Controller
     {
-        private readonly Proj0Context _context;
+        public Library.IOrderRepo Repo { get; }
 
-        public LocationsController(Proj0Context context)
+        public LocationsController(Library.IOrderRepo repo)
         {
-            _context = context;
+            Repo = repo;
         }
 
         // GET: Locations
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await _context.Location.ToListAsync());
+            IEnumerable<Library.Location> libLocs = Repo.GetLocations();
+            var model = libLocs.Select(m => new LocationViewModel
+            {
+                LocationId = m.LocId,
+                Address = m.StreetAddress,
+                City = m.City,
+                State = m.State,
+                Zip = m.Zip
+            });
+            return View(model);
         }
 
         // GET: Locations/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var location = await _context.Location
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Library.Location location = Repo.SearchLocationsById((int)id);
+            List<Library.Inventory> StoreInv = new List<Library.Inventory>();
+
             if (location == null)
             {
                 return NotFound();
             }
 
-            return View(location);
+            LocationViewModel model = new LocationViewModel
+            {
+                LocationId = location.LocId,
+                Address = location.StreetAddress,
+                City = location.City,
+                State = location.State,
+                Zip = location.Zip,
+                Prod = Repo.GetProducts().ToList(),
+                Inventory = Repo.GetInventory(location.LocId).ToList()
+            };
+            bool hs = true;
+            for(int x = 0; x < model.Prod.Count; x++)
+            {
+                Library.Inventory Inv = new Library.Inventory();
+                Inv.ProductId = model.Prod[x].ProdId;
+                hs = model.Inventory.Any(
+                    y => y.LocationId == model.LocationId && 
+                    y.ProductId == model.Prod[x].ProdId);
+                if (hs == true)
+                {
+                    Inv.Quantity = model.Inventory.First(
+                        y => y.LocationId == model.LocationId &&
+                        y.ProductId == model.Prod[x].ProdId).Quantity;
+                }
+                else
+                    Inv.Quantity = 0;
+                Inv.LocationId = model.LocationId;
+                StoreInv.Add(Inv);
+            }
+            model.StoreInv = StoreInv;
+
+            return View(model);
         }
 
         // GET: Locations/Create
-        public IActionResult Create()
+        public ActionResult Create()
         {
-            return View();
+            var model = new LocationViewModel
+            {
+            };
+            return View(model);
         }
 
         // POST: Locations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Street,City,State,Zip")] Location location)
+        public ActionResult Create(LocationViewModel location)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(location);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var model = new LocationViewModel();
+                if (ModelState.IsValid)
+                {
+                    Repo.AddLocation(new Library.Location
+                    {
+                        StreetAddress = location.Address,
+                        City = location.City,
+                        State = location.State,
+                        Zip = location.Zip
+                    });
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(model);
             }
-            return View(location);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Locations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        /*public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -147,6 +203,6 @@ namespace OrderSystem.WebApp.Controllers
         private bool LocationExists(int id)
         {
             return _context.Location.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

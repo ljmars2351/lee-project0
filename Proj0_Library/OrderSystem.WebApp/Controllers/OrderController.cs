@@ -36,19 +36,13 @@ namespace OrderSystem.WebApp.Controllers
         }
 
         // GET: Order/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            
 
             Library.Order cart = Repo.GetOrderById((int)id);
 
-            if (cart == null)
-            {
-                return NotFound();
-            }
+            
 
             OrderViewModel model = new OrderViewModel
             {
@@ -66,10 +60,7 @@ namespace OrderSystem.WebApp.Controllers
         // GET: Order/Create
         public ActionResult Create()
         {
-            var model = new OrderViewModel
-            {
-                locList = Repo.GetLocations().ToList(),
-            };
+            var model = new OrderViewModel();
             return View(model);
         }
 
@@ -85,9 +76,9 @@ namespace OrderSystem.WebApp.Controllers
                 {
                     Repo.AddOrder(new Library.Order
                     {
-                        CustId = cart.Customer.CustId,
-                        StoreId = cart.Location.LocId,
-                        ProdId = cart.Prod.ProdId,
+                        CustId = cart.CustomerId,
+                        StoreId = cart.LocationId,
+                        ProdId = cart.ProdId,
                         Quantity = cart.Quant,
                         OrdTIme = DateTime.Now
                     });

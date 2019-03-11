@@ -140,7 +140,7 @@ namespace OrderSystem.Library
         {
             if (_db.Cart.Any(s => s.Id == ordId))
             {
-                return OrderMapper.Map(_db.Cart.Find(ordId));
+                return OrderMapper.Map(_db.Cart.First(x => x.Id == ordId));
             }
             else
                 return null;

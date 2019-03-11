@@ -12,12 +12,18 @@ namespace OrderSystem.WebApp.ViewModels
         public int OrderId { get; set; }
 
         [Display(Name = "Customer ID")]
+        public int CustomerId { get; set; }
+
         public Library.Customer Customer { get; set; }
 
-        [Display(Name = "Location")]
+        [Display(Name = "Location ID")]
+        public int LocationId { get; set; }
+
         public Library.Location Location { get; set; }
 
-        [Display(Name = "Product")]
+        [Display(Name = "Product ID")]
+        public int ProdId { get; set; }
+
         public Library.Products Prod { get; set; }
 
         [Display(Name = "Order Time")]
@@ -28,6 +34,8 @@ namespace OrderSystem.WebApp.ViewModels
         public int Quant { get; set; }
 
         [Display(Name = "Location List")]
-        public List<Library.Location> locList { get; set; }
+        public List<Library.Location> LocList { get; set; }
+
+
     }
 }
