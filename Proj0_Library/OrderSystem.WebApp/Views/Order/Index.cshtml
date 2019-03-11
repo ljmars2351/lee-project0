@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrderSystem.DataAccess.Cart>
+﻿@model IEnumerable<OrderSystem.WebApp.ViewModels.OrderViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CurrentTime)
+                @Html.DisplayNameFor(model => model.OrdTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                @Html.DisplayNameFor(model => model.Quant)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cust)
+                @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Loc)
+                @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Prod)
@@ -34,24 +34,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CurrentTime)
+                @Html.DisplayFor(modelItem => item.OrdTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.DisplayFor(modelItem => item.Quant)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cust.Id)
+                @Html.DisplayFor(modelItem => item.Customer.FName + " " + item.Customer.LName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Loc.City)
+                @Html.DisplayFor(modelItem => item.Location.City)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Prod.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

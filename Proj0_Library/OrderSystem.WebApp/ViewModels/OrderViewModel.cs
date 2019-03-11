@@ -12,12 +12,22 @@ namespace OrderSystem.WebApp.ViewModels
         public int OrderId { get; set; }
 
         [Display(Name = "Customer ID")]
-        public int CustomerId { get; set; }
+        public Library.Customer Customer { get; set; }
 
         [Display(Name = "Location")]
-        public Library.Location LocationId { get; set; }
+        public Library.Location Location { get; set; }
 
         [Display(Name = "Product")]
-        public Library.Products prod { get; set; }
+        public Library.Products Prod { get; set; }
+
+        [Display(Name = "Order Time")]
+        [DataType(DataType.DateTime)]
+        public DateTime OrdTime { get; set; }
+
+        [Display(Name = "Quantity Ordered")]
+        public int Quant { get; set; }
+
+        [Display(Name = "Location List")]
+        public List<Library.Location> locList { get; set; }
     }
 }

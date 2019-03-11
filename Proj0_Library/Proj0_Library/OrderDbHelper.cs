@@ -28,7 +28,7 @@ namespace OrderSystem.Library
             _db.SaveChanges();
         }
 
-        public void AddOrder(List<Order> ord)
+        public void AddOrder(Order ord)
         {
             Order temp = new Order();
             int newId = 0;
@@ -37,12 +37,9 @@ namespace OrderSystem.Library
                 temp = OrderMapper.Map(_db.Cart.Last());
                 newId = temp.OrdId + 1;
             }
-            for (int x = 0; x < ord.Count; x++)
-            {
-                ord[x].OrdId = newId;
-                _db.Add(OrderMapper.Map(ord[x]));
-                _db.SaveChanges();
-            }
+            ord.OrdId = newId;
+            _db.Add(OrderMapper.Map(ord));
+            _db.SaveChanges();
         }
 
         public void AddProduct(Products prod)
@@ -131,12 +128,27 @@ namespace OrderSystem.Library
 
         public Products SearchProductsById(int prodId)
         {
-            if (_db.ProdHist.Any(s => s.Id == prodId))
+            if (_db.Product.Any(s => s.Id == prodId))
             {
-                return OrderMapper.Map(_db.ProdHist.Find(prodId));
+                return OrderMapper.Map(_db.Product.Find(prodId));
             }
             else
                 return null;
+        }
+
+        public Order GetOrderById(int ordId)
+        {
+            if (_db.Cart.Any(s => s.Id == ordId))
+            {
+                return OrderMapper.Map(_db.Cart.Find(ordId));
+            }
+            else
+                return null;
+        }
+
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return OrderMapper.Map(_db.Cart);
         }
 
         public Location SearchLocationsById(int locId)

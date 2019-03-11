@@ -6,86 +6,115 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrderSystem.DataAccess;
+using OrderSystem.WebApp.ViewModels;
 
 namespace OrderSystem.WebApp.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly Proj0Context _context;
+        public Library.IOrderRepo Repo { get; }
 
-        public ProductsController(Proj0Context context)
+        public ProductsController(Library.IOrderRepo repo)
         {
-            _context = context;
+            Repo = repo;
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await _context.Product.ToListAsync());
+            IEnumerable<Library.Products> libProds = Repo.GetProducts();
+            var model = libProds.Select(m => new ProductViewModel
+            {
+                Id = m.ProdId,
+                ProdName = m.Name,
+                Price = m.Price
+            }).ToList();
+            return View(model);
         }
 
         // GET: Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Library.Products product = Repo.SearchProductsById((int)id);
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            ProductViewModel model = new ProductViewModel
+            {
+                Id = product.ProdId,
+                ProdName = product.Name,
+                Price = product.Price
+            };
+
+            return View(model);
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public ActionResult Create()
         {
-            return View();
+            var model = new ProductViewModel();
+            return View(model);
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price")] Product product)
+        public ActionResult Create(ProductViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    Repo.AddProduct(new Library.Products
+                    {
+                        Name = model.ProdName,
+                        Price = model.Price,
+                    });
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                    return View(model);
             }
-            return View(product);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = Repo.SearchProductsById((int)id);
             if (product == null)
             {
                 return NotFound();
             }
-            return View(product);
+            ProductViewModel model = new ProductViewModel
+            {
+                Id = product.ProdId,
+                ProdName = product.Name,
+                Price = product.Price
+            };
+            return View(model);
         }
 
         // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Price")] Product product)
         {
             if (id != product.Id)
             {
@@ -96,8 +125,7 @@ namespace OrderSystem.WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +144,7 @@ namespace OrderSystem.WebApp.Controllers
         }
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -147,6 +175,6 @@ namespace OrderSystem.WebApp.Controllers
         private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

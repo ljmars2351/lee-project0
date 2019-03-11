@@ -20,10 +20,12 @@ namespace OrderSystem.Library
         Location SearchLocationsById(int locId);
         Customer SearchCustomersByName(string fName, string lName);
         void AddLocation(Location loc);
-        void AddOrder(List<Order> ord);
+        void AddOrder(Order ord);
         void DeleteCustomer(int custId);
         void AddProduct(Products prod);
         void RemoveCustomer(Customer cust);
+        IEnumerable<Order> GetAllOrders();
+        Order GetOrderById(int id);
         void UpdateInv(List<Library.Inventory> inventories);
         Customer SearchCustomersById(int custId);
         IEnumerable<Order> SearchOrdersByStore(int locId);

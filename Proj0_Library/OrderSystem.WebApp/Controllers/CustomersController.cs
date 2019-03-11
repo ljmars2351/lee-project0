@@ -77,22 +77,23 @@ namespace OrderSystem.WebApp.Controllers
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,DateOfBirth,PrefLoc")] Customer customer)
+        public ActionResult Create(CustomerViewModel customer)
         {
             try
             {
+                var model = new CustomerViewModel();
                 if (ModelState.IsValid)
                 {
                     Repo.AddCustomer(new Library.Customer
                     {
                         FName = customer.FirstName,
                         LName = customer.LastName,
-                        DateOfBirth = (DateTime)customer.DateOfBirth,
-                        Loc = (int)customer.PrefLoc
+                        DateOfBirth = customer.DateOfBirth,
+                        Loc = customer.PrefLocNavigation.LocId
                     });
                     return RedirectToAction(nameof(Index));
                 }
-                return View(customer);
+                return View(model);
             }
             catch
             {
