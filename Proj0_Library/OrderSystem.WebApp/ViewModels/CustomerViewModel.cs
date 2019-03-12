@@ -28,5 +28,7 @@ namespace OrderSystem.WebApp.ViewModels
 
         [Display(Name = "Preferred Location")]
         public List<Library.Location> PrefLoc { get; set; }
+
+
     }
 }
