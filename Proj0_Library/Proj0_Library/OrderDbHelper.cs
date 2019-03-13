@@ -92,9 +92,9 @@ namespace OrderSystem.Library
             _db.SaveChanges();
         }
 
-        public IEnumerable<Library.Inventory> GetInventory(int LocId)
+        public IEnumerable<Library.Inventory> GetInventory(int locId)
         {
-            return OrderMapper.Map(_db.Inventory.Where(r => r.LocationId == LocId));
+            return OrderMapper.Map(_db.Inventory.Where(r => r.LocationId == locId));
         }
 
         public IEnumerable<Library.Order> GetCustOrders(int custId)
@@ -136,11 +136,11 @@ namespace OrderSystem.Library
                 return null;
         }
 
-        public Order GetOrderById(int ordId)
+        public Order GetOrderById(int id)
         {
-            if (_db.Cart.Any(s => s.Id == ordId))
+            if (_db.Cart.Any(s => s.Id == id))
             {
-                return OrderMapper.Map(_db.Cart.First(x => x.Id == ordId));
+                return OrderMapper.Map(_db.Cart.First(x => x.Id == id));
             }
             else
                 return null;
@@ -184,11 +184,6 @@ namespace OrderSystem.Library
         public IEnumerable<Order> SearchOrdersByStore(int LocId)
         {
             return OrderMapper.Map(_db.Cart.Where(r => r.LocId == LocId));
-        }
-
-        public void CreateNewBundle(string Name, decimal Price, List<Products> products)
-        {
-
         }
 
         public void DeleteCustomer(int custId)
